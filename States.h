@@ -144,5 +144,4 @@ void Update_Heater() {
         server.send(200, "text/plain", "OK");
     });
 }
-void Update_
 

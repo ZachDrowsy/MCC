@@ -1,7 +1,7 @@
 #pragma once
 #include <Arduino.h>
 
-// UI only: existing network requests remain integration placeholders.
+// Live sensor readings are connected; control requests remain integration placeholders.
 // Firmware must apply modes and validate settings independently of the browser.
 // Mist AUTO: ON below humidityThresholdPercent; OFF at/above
 // humidityOffThresholdPercent; retain the previous output between thresholds.
@@ -214,12 +214,12 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
       <h1>Micro-Climate Controller</h1>
       <div class="subtitle">Irrigation, mist, lighting, fan and heater controller</div>
     </div>
-    <div class="status" id="connectionStatus">UI PREVIEW</div>
+    <div class="status" id="connectionStatus" role="status">CONNECTING</div>
   </div>
 
   <div class="sensor-grid">
     <div class="sensor">
-      <div class="sensor-label">Soil Moisture</div>
+      <div class="sensor-label">Soil Moisture (raw ADC)</div>
       <div class="sensor-value" id="moistureValue">N/A</div>
     </div>
     <div class="sensor">
@@ -731,6 +731,41 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
     //   body: JSON.stringify(settings)
     // });
   });
+
+  // Read the sensors again two seconds after each request finishes.
+  async function updateSensors() {
+    const controller = new AbortController();
+    const timeout = setTimeout(function() { controller.abort(); }, 5000);
+
+    try {
+      const response = await fetch("/api/sensors", {
+        cache: "no-store",
+        signal: controller.signal
+      });
+      if (!response.ok) throw new Error("Sensor request failed");
+      const sensors = await response.json();
+
+      document.getElementById("temperatureValue").textContent =
+        Number.isFinite(sensors.temperatureF) ? sensors.temperatureF.toFixed(1) + " °F" : "N/A";
+      document.getElementById("humidityValue").textContent =
+        Number.isFinite(sensors.humidity) ? sensors.humidity.toFixed(1) + " % RH" : "N/A";
+      document.getElementById("moistureValue").textContent =
+        Number.isFinite(sensors.moistureRaw) ? sensors.moistureRaw + " raw" : "N/A";
+      document.getElementById("connectionStatus").textContent =
+        Number.isFinite(sensors.temperatureF) && Number.isFinite(sensors.humidity) &&
+        Number.isFinite(sensors.moistureRaw) ? "LIVE" : "SENSOR UNAVAILABLE";
+    } catch (error) {
+      document.getElementById("temperatureValue").textContent = "N/A";
+      document.getElementById("humidityValue").textContent = "N/A";
+      document.getElementById("moistureValue").textContent = "N/A";
+      document.getElementById("connectionStatus").textContent = "DISCONNECTED";
+    } finally {
+      clearTimeout(timeout);
+      setTimeout(updateSensors, 2000);
+    }
+  }
+
+  updateSensors();
 
   updateAllSummaries();
 </script>
