@@ -8,6 +8,7 @@ void setup(){
     
     // sets up declarations for all THREE sensors 
     Setup_Sensors(); // moisture pin = MOISTURE_PIN
+    Register_State_Controls();
     startMCCNetwork();
 }
 
