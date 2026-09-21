@@ -18,24 +18,45 @@ void loop(){
     //This will read and display sensor data in the Serial Monitor and hopefully the web_ui
     Read_Sensors();
 
+    // Temporary raw ADC thresholds until the moisture sensor is calibrated
+    // and the user's webpage settings are connected.
+    const uint16_t IRRIGATION_DRY_THRESHOLD = 2500;
+    const uint16_t IRRIGATION_WET_THRESHOLD = 1800;
+
     // Irrigation state machine.
     if (Irrigation_State == SolenoidState::OFF) {
-        // The irrigation output should stay off.
-        // We still need an irrigation relay pin before we can write hardware here.
+        Pump_State = Pump::OFF;
+        // The irrigation solenoid should be closed here.
     }
     else if (Irrigation_State == SolenoidState::MANUAL) {
-        // Manual mode will open irrigation when the user asks for it.
-        // We still need the relay pin and a manual on/off command.
+        Pump_State = Pump::ON;
+        // The irrigation solenoid should be open here.
     }
     else if (Irrigation_State == SolenoidState::SCHEDULE) {
-        // Schedule mode will open irrigation while the schedule is active.
-        // We have the Schedule class, but we still need an irrigation
-        // Schedule object and settings for its start time, duration, and days.
+        // This will become Irrigation_Schedule.isActive() later.
+        bool irrigationScheduleActive = false;
+
+        if (irrigationScheduleActive) {
+            Pump_State = Pump::ON;
+            // The irrigation solenoid should be open here.
+        }
+        else {
+            Pump_State = Pump::OFF;
+            // The irrigation solenoid should be closed here.
+        }
     }
     else if (Irrigation_State == SolenoidState::AUTO) {
-        // Automatic mode will use the soil moisture reading.
-        // We have the AutoControl class, but we still need to choose the
-        // moisture thresholds and connect its result to the irrigation relay.
+        // This assumes a higher raw reading means drier soil.
+        // We will verify that direction during moisture calibration.
+        if (Moisture_Raw >= IRRIGATION_DRY_THRESHOLD) {
+            Pump_State = Pump::ON;
+            // The irrigation solenoid should be open here.
+        }
+        else if (Moisture_Raw <= IRRIGATION_WET_THRESHOLD) {
+            Pump_State = Pump::OFF;
+            // The irrigation solenoid should be closed here.
+        }
+        // Between the thresholds, keep the previous pump state.
     }
 
     //Display states to error check 

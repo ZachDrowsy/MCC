@@ -4,6 +4,11 @@
 #include "connection.h"
 
 // The state names stay the same so the rest of the project can use them.
+enum class Pump : uint8_t {
+    ON,
+    OFF
+};
+
 enum class SolenoidState : uint8_t {
     OFF,
     MANUAL,
@@ -22,6 +27,8 @@ enum class DeviceState : uint8_t {
     AUTO,
     MANUAL
 };
+
+Pump Pump_State = Pump::OFF;
 
 SolenoidState Irrigation_State = SolenoidState::OFF;
 SolenoidState Mist_State = SolenoidState::OFF;
