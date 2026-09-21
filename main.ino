@@ -5,12 +5,16 @@
 
 void setup(){
     Serial.begin(115200);
-    Setup_Sensors();
+    
+    // sets up declarations for all THREE sensors 
+    Setup_Sensors(); // moisture pin = MOISTURE_PIN
     startMCCNetwork();
 }
 
 void loop(){
     handleMCCNetwork();
+    
+    //This will read and display sensor data in the Serial Monitor and hopefully the web_ui
     Read_Sensors();
 
     //Display states to error check 
