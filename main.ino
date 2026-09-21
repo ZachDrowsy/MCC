@@ -18,6 +18,26 @@ void loop(){
     //This will read and display sensor data in the Serial Monitor and hopefully the web_ui
     Read_Sensors();
 
+    // Irrigation state machine.
+    if (Irrigation_State == SolenoidState::OFF) {
+        // The irrigation output should stay off.
+        // We still need an irrigation relay pin before we can write hardware here.
+    }
+    else if (Irrigation_State == SolenoidState::MANUAL) {
+        // Manual mode will open irrigation when the user asks for it.
+        // We still need the relay pin and a manual on/off command.
+    }
+    else if (Irrigation_State == SolenoidState::SCHEDULE) {
+        // Schedule mode will open irrigation while the schedule is active.
+        // We have the Schedule class, but we still need an irrigation
+        // Schedule object and settings for its start time, duration, and days.
+    }
+    else if (Irrigation_State == SolenoidState::AUTO) {
+        // Automatic mode will use the soil moisture reading.
+        // We have the AutoControl class, but we still need to choose the
+        // moisture thresholds and connect its result to the irrigation relay.
+    }
+
     //Display states to error check 
     /*Serial.print("Pump State: ");
     Serial.print(Pump_State);
