@@ -4,30 +4,30 @@
 #include "connection.h"
 
 // The state names stay the same so the rest of the project can use them.
-enum class SimpleSolenoidState : uint8_t {
+enum class SolenoidState : uint8_t {
     OFF,
     MANUAL,
     SCHEDULE,
     AUTO
 };
 
-enum class SimpleLightState : uint8_t {
+enum class LightState : uint8_t {
     OFF,
     MANUAL,
     SCHEDULE
 };
 
-enum class SimpleDeviceState : uint8_t {
+enum class DeviceState : uint8_t {
     OFF,
     AUTO,
     MANUAL
 };
 
-SimpleSolenoidState Irrigation_State = SimpleSolenoidState::OFF;
-SimpleSolenoidState Mist_State = SimpleSolenoidState::OFF;
-SimpleLightState Light_State = SimpleLightState::OFF;
-SimpleDeviceState Fan_State = SimpleDeviceState::OFF;
-SimpleDeviceState Heater_State = SimpleDeviceState::OFF;
+SolenoidState Irrigation_State = SolenoidState::OFF;
+SolenoidState Mist_State = SolenoidState::OFF;
+LightState Light_State = LightState::OFF;
+DeviceState Fan_State = DeviceState::OFF;
+DeviceState Heater_State = DeviceState::OFF;
 
 // This is the one web handler for changing a device mode.
 //
@@ -44,79 +44,79 @@ void Register_State_Controls() {
 
         if (system == "irrigation") {
             if (mode == "off") {
-                Irrigation_State = SimpleSolenoidState::OFF;
+                Irrigation_State = SolenoidState::OFF;
                 stateChanged = true;
             }
             else if (mode == "manual") {
-                Irrigation_State = SimpleSolenoidState::MANUAL;
+                Irrigation_State = SolenoidState::MANUAL;
                 stateChanged = true;
             }
             else if (mode == "schedule") {
-                Irrigation_State = SimpleSolenoidState::SCHEDULE;
+                Irrigation_State = SolenoidState::SCHEDULE;
                 stateChanged = true;
             }
             else if (mode == "auto") {
-                Irrigation_State = SimpleSolenoidState::AUTO;
+                Irrigation_State = SolenoidState::AUTO;
                 stateChanged = true;
             }
         }
         else if (system == "mist") {
             if (mode == "off") {
-                Mist_State = SimpleSolenoidState::OFF;
+                Mist_State = SolenoidState::OFF;
                 stateChanged = true;
             }
             else if (mode == "manual") {
-                Mist_State = SimpleSolenoidState::MANUAL;
+                Mist_State = SolenoidState::MANUAL;
                 stateChanged = true;
             }
             else if (mode == "schedule") {
-                Mist_State = SimpleSolenoidState::SCHEDULE;
+                Mist_State = SolenoidState::SCHEDULE;
                 stateChanged = true;
             }
             else if (mode == "auto") {
-                Mist_State = SimpleSolenoidState::AUTO;
+                Mist_State = SolenoidState::AUTO;
                 stateChanged = true;
             }
         }
         else if (system == "light") {
             if (mode == "off") {
-                Light_State = SimpleLightState::OFF;
+                Light_State = LightState::OFF;
                 stateChanged = true;
             }
             else if (mode == "manual") {
-                Light_State = SimpleLightState::MANUAL;
+                Light_State = LightState::MANUAL;
                 stateChanged = true;
             }
             else if (mode == "schedule") {
-                Light_State = SimpleLightState::SCHEDULE;
+                Light_State = LightState::SCHEDULE;
                 stateChanged = true;
             }
         }
         else if (system == "fan") {
             if (mode == "off") {
-                Fan_State = SimpleDeviceState::OFF;
+                Fan_State = DeviceState::OFF;
                 stateChanged = true;
             }
             else if (mode == "auto") {
-                Fan_State = SimpleDeviceState::AUTO;
+                Fan_State = DeviceState::AUTO;
                 stateChanged = true;
             }
             else if (mode == "manual") {
-                Fan_State = SimpleDeviceState::MANUAL;
+                Fan_State = DeviceState::MANUAL;
                 stateChanged = true;
             }
         }
         else if (system == "heater") {
             if (mode == "off") {
-                Heater_State = SimpleDeviceState::OFF;
+                Heater_State = DeviceState::OFF;
                 stateChanged = true;
             }
             else if (mode == "auto") {
-                Heater_State = SimpleDeviceState::AUTO;
+                Heater_State = DeviceState::AUTO;
                 stateChanged = true;
             }
             else if (mode == "manual") {
-                Heater_State = SimpleDeviceState::MANUAL;
+                Heater_State = DeviceState::MANUAL;
                 stateChanged = true;
             }
         }
