@@ -2,6 +2,9 @@
 #include "include/States.h"
 #include "include/Schedule.h"
 #include "include/Sensors.h"
+#include "include/Controller.h"
+#include "include/Auto_Control.h"
+
 
 AutoControl Auto;
 Schedule schedule;
@@ -26,6 +29,11 @@ void loop(){
     
     //This will read and display sensor data in the Serial Monitor and hopefully the web_ui
     Read_Sensors();
+    Irrigation.update(Irrigation_State, Moisture_Raw);
+    Mist.update(Mist_State, humidity);
+    Light.update(Light_State);
+    Heater.update(Heater_State, temp);
+    Fan.update(Fan_State, tempe);
 
     // Temporary raw ADC thresholds until the moisture sensor is calibrated
     // and the user's webpage settings are connected.
@@ -33,44 +41,29 @@ void loop(){
     const uint16_t IRRIGATION_WET_THRESHOLD = 1800;
 
     // Irrigation state machine.
-    if (Irrigation_State == SolenoidState::OFF) {
-        Pump_State = Pump::OFF;
-        // The irrigation solenoid should be closed here.
-        //digitalWrite(pin, voltage);
-        Irrigation_State.update(Irrigation_State, Moisture_Raw);
-    }
-    else if (Irrigation_State == SolenoidState::MANUAL) {
-        Pump_State = Pump::ON;
-        // The irrigation solenoid should be open here.
-        // Simply should have digitalWrite high
-        Irrigation.update(Irrigation_State, Moisture_Raw);
-    }
-    else if (Irrigation_State == SolenoidState::SCHEDULE) {
-        // This will become Irrigation_Schedule.isActive() later.
-        bool irrigationScheduleActive = false;
+switch {
 
-        if (irrigationScheduleActive) {
-            Pump_State = Pump::ON;
-            // The irrigation solenoid should be open here.
+case: Irrigation.update(Irrigation_State, Moisture_Raw);
+    if (Should_Run = true) {
+        Irrigation.Run_Irrigation(Pump_State = Pump::ON);
+    }else if (Should_Run == schedule.isActive()) {
+       //wait for the scheduled time then ... Should_Run = true;
+    }else if (Should_Run == Auto.isActive(Moisture_Raw) {
+        //if( moisture < level){
+        
         }
         else {
-            Pump_State = Pump::OFF;
-            // The irrigation solenoid should be closed here.
+            Should_Run = false;
+          
         }
+    }else {
+        Should_Run = false;
     }
-    else if (Irrigation_State == SolenoidState::AUTO) {
+case: Mist.update(Mist_State, humidity);
+    
         // This assumes a higher raw reading means drier soil.
         // We will verify that direction during moisture calibration.
-        if (Moisture_Raw >= IRRIGATION_DRY_THRESHOLD) {
-            Pump_State = Pump::ON;
-            // The irrigation solenoid should be open here.
-        }
-        else if (Moisture_Raw <= IRRIGATION_WET_THRESHOLD) {
-            Pump_State = Pump::OFF;
-            // The irrigation solenoid should be closed here.
-        }
-        // Between the thresholds, keep the previous pump state.
-    }
+   
 
     //Display states to error check 
     /*Serial.print("Pump State: ");
