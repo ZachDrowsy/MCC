@@ -43,7 +43,7 @@ public:
     // Return true only when accepted; false leaves the old settings unchanged.
     // Hours: 0-23, minutes: 0-59, duration: 1-1440 minutes.
     // The current Schedule class does not support runs crossing midnight.
-    bool setSchedule(int hour, int minute, int durationMinutes);
+    bool setSchedule(const Controller& device, int hour, int minute, int durationMinutes);
 
     // Sunday = 0 through Saturday = 6.
     bool setScheduleDay(int day, bool enabled);
