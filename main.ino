@@ -41,23 +41,29 @@ void loop(){
     const uint16_t IRRIGATION_WET_THRESHOLD = 1800;
 
     // Irrigation state machine.
-Irrigation.update(Irrigation_State, Moisture_Raw);
+    Irrigation.update(Irrigation_State, Moisture_Raw);
 
-if (Irrigation.getShouldRun() == true) {
+    if (Irrigation.getShouldRun() == true) {
     // Open irrigation valve.
-    Irrigation.Run_Irrigation(Pump_State = Pump::ON);
-} else {
+        Irrigation.Run_Irrigation(Pump_State = Pump::ON);
+    } else {
     // Close irrigation valve.
-    Irrigation.Run_Irrigation(Pump_State = Pump::OFF);
-}
+        Irrigation.Run_Irrigation(Pump_State = Pump::OFF);
+    }
 //Mist state machine   
-if (Mist.getShouldRun() == true) {
-    // Open irrigation valve.
-    Mist.Run_Irrigation(Pump_State = Pump::ON);
-} else {
+    if (Mist.getShouldRun() == true) {
+        // Open irrigation valve.
+        Mist.Run_Irrigation(Pump_State = Pump::ON);
+    } else {
     // Close irrigation valve.
-    Mist.Run_Irrigation(Pump_State = Pump::OFF);
-}
+        Mist.Run_Irrigation(Pump_State = Pump::OFF);
+    }
+// Run light state decision
+Light.Run_Light();
+// Heater and Fan state decision
+Heater.Run_Heater();
+Fan.Run_Fan();
+
 
     //Display states to error check 
     /*Serial.print("Pump State: ");
