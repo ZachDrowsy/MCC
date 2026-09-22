@@ -41,26 +41,13 @@ void loop(){
     const uint16_t IRRIGATION_WET_THRESHOLD = 1800;
 
     // Irrigation state machine.
-switch {
+Irrigation.update(Irrigation_State, Moisture_Raw);
 
-case: Irrigation.update(Irrigation_State, Moisture_Raw);
-    if (Should_Run = true) {
-        Irrigation.Run_Irrigation(Pump_State = Pump::ON);
-    }else if (Should_Run == schedule.isActive()) {
-       //wait for the scheduled time then ... Should_Run = true;
-    }else if (Should_Run == Auto.isActive(Moisture_Raw) {
-        //if( moisture < level){
-        
-        }
-        else {
-            Should_Run = false;
-          
-        }
-    }else {
-        Should_Run = false;
-    }
-case: Mist.update(Mist_State, humidity);
-    
+if (Irrigation.getShouldRun() == true) {
+    // Open irrigation valve.
+} else {
+    // Close irrigation valve.
+}
         // This assumes a higher raw reading means drier soil.
         // We will verify that direction during moisture calibration.
    
