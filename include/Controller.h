@@ -4,11 +4,6 @@
 #include "Auto_Control.h"
 #include "Schedule.h"
 #include "States.h"
-// These enum types are defined in States.h.
-// Their names and sizes are enough for the update declarations below.
-enum class SolenoidState : uint8_t;
-enum class LightState : uint8_t;
-enum class DeviceState : uint8_t;
 
 class Controller{
 private:
