@@ -69,7 +69,7 @@ void Controller::update(SolenoidState mode, float reading) {
         Should_Run = false;
     }
     else if (mode == SolenoidState::MANUAL) {
-        Should_Run = manual;
+        Should_Run = true;
     }
     else if (mode == SolenoidState::SCHEDULE) {
         Should_Run = schedule.isActive();
@@ -85,7 +85,7 @@ void Controller::update(LightState mode) {
         Should_Run = false;
     }
     else if (mode == LightState::MANUAL) {
-        Should_Run = manual; 
+        Should_Run = true; 
     }
     else if (mode == LightState::SCHEDULE) {
         Should_Run = schedule.isActive(); // schedule.is active
@@ -97,7 +97,8 @@ void Controller::update(DeviceState mode, float reading) {
         Should_Run = false;
     }
     else if (mode == DeviceState::MANUAL) {
-        Should_Run = manual;
+        
+        Should_Run = true;
     }
     else if (mode == DeviceState::AUTO) {
         Should_Run = automatic.isActive(reading);
