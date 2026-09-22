@@ -56,15 +56,6 @@ public:
     // false: turn on above the upper threshold (for example, cooling).
     bool setTurnOnBelow(bool enabled);
 
-    // Incoming webpage text: reject empty, malformed, or overflowing numbers.
-    // Use these BEFORE any toInt(), toFloat(), or bool conversion.
-    // Booleans accept only "true", "false", "1", or "0".
-    bool setManualFromText(const String& text);
-    bool setScheduleFromText(const String& hour, const String& minute,
-                             const String& durationMinutes);
-    bool setScheduleDayFromText(const String& day, const String& enabled);
-    bool setAutomaticThresholdsFromText(const String& lower, const String& upper);
-    bool setTurnOnBelowFromText(const String& text);
 
     // Read settings back without allowing outside code to change the members.
     const Schedule& getSchedule() const;

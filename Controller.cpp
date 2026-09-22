@@ -1,5 +1,4 @@
 #include "Controller.h"
-#include "InputValidation.h"
 
 // The booleans start false as declared in Controller.h.
 // Members not listed below use their own default constructors.
@@ -53,57 +52,6 @@ bool Controller::setAutomaticThresholds(float lower, float upper) {
 
 bool Controller::setTurnOnBelow(bool enabled) {
     return automatic.set_Turn_On_Below(enabled);
-}
-
-// Check ALL incoming fields before changing any member.
-
-bool Controller::setManualFromText(const String& text) {
-    bool choice;
-    if (!InputValidation::readBoolean(text, choice)) {
-        return false;
-    }
-    return setManual(choice);
-}
-
-bool Controller::setScheduleFromText(const String& hour, const String& minute,
-                                      const String& durationMinutes) {
-    int newHour;
-    int newMinute;
-    int newDuration;
-    if (!InputValidation::readInteger(hour, newHour) ||
-        !InputValidation::readInteger(minute, newMinute) ||
-        !InputValidation::readInteger(durationMinutes, newDuration)) {
-        return false;
-    }
-    return setSchedule(newHour, newMinute, newDuration);
-}
-
-bool Controller::setScheduleDayFromText(const String& day, const String& enabled) {
-    int newDay;
-    bool newEnabled;
-    if (!InputValidation::readInteger(day, newDay) ||
-        !InputValidation::readBoolean(enabled, newEnabled)) {
-        return false;
-    }
-    return setScheduleDay(newDay, newEnabled);
-}
-
-bool Controller::setAutomaticThresholdsFromText(const String& lower, const String& upper) {
-    float newLower;
-    float newUpper;
-    if (!InputValidation::readDecimal(lower, newLower) ||
-        !InputValidation::readDecimal(upper, newUpper)) {
-        return false;
-    }
-    return setAutomaticThresholds(newLower, newUpper);
-}
-
-bool Controller::setTurnOnBelowFromText(const String& text) {
-    bool newEnabled;
-    if (!InputValidation::readBoolean(text, newEnabled)) {
-        return false;
-    }
-    return setTurnOnBelow(newEnabled);
 }
 
 const Schedule& Controller::getSchedule() const {
