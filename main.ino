@@ -45,12 +45,19 @@ Irrigation.update(Irrigation_State, Moisture_Raw);
 
 if (Irrigation.getShouldRun() == true) {
     // Open irrigation valve.
+    Irrigation.Run_Irrigation(Pump_State = Pump::ON);
 } else {
     // Close irrigation valve.
+    Irrigation.Run_Irrigation(Pump_State = Pump::OFF);
 }
-        // This assumes a higher raw reading means drier soil.
-        // We will verify that direction during moisture calibration.
-   
+//Mist state machine   
+if (Mist.getShouldRun() == true) {
+    // Open irrigation valve.
+    Mist.Run_Irrigation(Pump_State = Pump::ON);
+} else {
+    // Close irrigation valve.
+    Mist.Run_Irrigation(Pump_State = Pump::OFF);
+}
 
     //Display states to error check 
     /*Serial.print("Pump State: ");
