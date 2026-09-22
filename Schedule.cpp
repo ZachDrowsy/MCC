@@ -10,21 +10,55 @@ Schedule::Schedule() {
     }
 }
 
-void Schedule::setStartTime(int hour, int minute) {
+bool Schedule::isValidTiming(int hour, int minute, int minutes) const {
+    if (hour < 0 || hour > 23) {
+        return false;
+    }
+    if (minute < 0 || minute > 59) {
+        return false;
+    }
+    // Zero is only used by a new schedule that has no duration yet.
+    if (minutes < 0 || minutes > 1440) {
+        return false;
+    }
+
+    int endMinutes = hour * 60 + minute + minutes;
+    return endMinutes <= 1440;
+}
+
+bool Schedule::setTiming(int hour, int minute, int minutes) {
+    if (minutes < 1 || !isValidTiming(hour, minute, minutes)) {
+        return false;
+    }
+
+    // Change all three together, only after all checks pass.
     startHour = hour;
     startMinute = minute;
-}
-
-void Schedule::setDurationMinutes(int minutes) {
     durationMinutes = minutes;
+    return true;
 }
 
-void Schedule::setDayEnabled(int day, bool enabled) {
+bool Schedule::setStartTime(int hour, int minute) {
+    if (!isValidTiming(hour, minute, durationMinutes)) {
+        return false;
+    }
+
+    startHour = hour;
+    startMinute = minute;
+    return true;
+}
+
+bool Schedule::setDurationMinutes(int minutes) {
+    return setTiming(startHour, startMinute, minutes);
+}
+
+bool Schedule::setDayEnabled(int day, bool enabled) {
     if (day < 0 || day > 6) {
-        return;
+        return false;
     }
 
     enabledDays[day] = enabled;
+    return true;
 }
 
 int Schedule::getStartHour() const {

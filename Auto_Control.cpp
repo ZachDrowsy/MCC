@@ -8,15 +8,24 @@ AutoControl::AutoControl() {
     output_On = false;
 }
 
-void AutoControl::set_Thresholds(float lower, float upper) {
+bool AutoControl::set_Thresholds(float lower, float upper) {
+    if (!std::isfinite(lower) || !std::isfinite(upper)) {
+        return false;
+    }
+    if (lower >= upper) {
+        return false;
+    }
+
     lower_Threshold = lower;
     upper_Threshold = upper;
     output_On = false;
+    return true;
 }
 
-void AutoControl::set_Turn_On_Below(bool enabled) {
+bool AutoControl::set_Turn_On_Below(bool enabled) {
     turn_On_Below = enabled;
     output_On = false;
+    return true;
 }
 
 float AutoControl::get_Lower_Threshold() const {

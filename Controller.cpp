@@ -1,4 +1,5 @@
 #include "Controller.h"
+#include "InputValidation.h"
 
 // The booleans start false as declared in Controller.h.
 // Members not listed below use their own default constructors.
@@ -21,12 +22,11 @@ Controller::Controller(const AutoControl& A)
     : automatic(A) {
 }
 
-// Remaining methods will be implemented one at a time.
-
 // Manual request and final decision
 
-void Controller::setManual(bool choice) {
+bool Controller::setManual(bool choice) {
     manual = choice;
+    return true;
 }
 
 bool Controller::getManual() const {
@@ -37,38 +37,85 @@ bool Controller::getShouldRun() const {
     return Should_Run;
 }
 
-// User settings
-// Set the starting time and duration
-bool Controller::setSchedule(const Controller& device, int hour, int minute, int durationMinutes) {
-    schedule.setStartTime(hour, minute);
-    schedule.setDurataionMinutes(durationMinutes);
-    return device.setManual(false);
+// The classes that own these settings perform their range checks.
+
+bool Controller::setSchedule(int hour, int minute, int durationMinutes) {
+    return schedule.setTiming(hour, minute, durationMinutes);
 }
 
 bool Controller::setScheduleDay(int day, bool enabled) {
-    // TODO
+    return schedule.setDayEnabled(day, enabled);
 }
 
 bool Controller::setAutomaticThresholds(float lower, float upper) {
-    // TODO
+    return automatic.set_Thresholds(lower, upper);
 }
 
-void Controller::setTurnOnBelow(bool enabled) {
-    // TODO
+bool Controller::setTurnOnBelow(bool enabled) {
+    return automatic.set_Turn_On_Below(enabled);
 }
 
-// Read settings
+// Check ALL incoming fields before changing any member.
+
+bool Controller::setManualFromText(const String& text) {
+    bool choice;
+    if (!InputValidation::readBoolean(text, choice)) {
+        return false;
+    }
+    return setManual(choice);
+}
+
+bool Controller::setScheduleFromText(const String& hour, const String& minute,
+                                      const String& durationMinutes) {
+    int newHour;
+    int newMinute;
+    int newDuration;
+    if (!InputValidation::readInteger(hour, newHour) ||
+        !InputValidation::readInteger(minute, newMinute) ||
+        !InputValidation::readInteger(durationMinutes, newDuration)) {
+        return false;
+    }
+    return setSchedule(newHour, newMinute, newDuration);
+}
+
+bool Controller::setScheduleDayFromText(const String& day, const String& enabled) {
+    int newDay;
+    bool newEnabled;
+    if (!InputValidation::readInteger(day, newDay) ||
+        !InputValidation::readBoolean(enabled, newEnabled)) {
+        return false;
+    }
+    return setScheduleDay(newDay, newEnabled);
+}
+
+bool Controller::setAutomaticThresholdsFromText(const String& lower, const String& upper) {
+    float newLower;
+    float newUpper;
+    if (!InputValidation::readDecimal(lower, newLower) ||
+        !InputValidation::readDecimal(upper, newUpper)) {
+        return false;
+    }
+    return setAutomaticThresholds(newLower, newUpper);
+}
+
+bool Controller::setTurnOnBelowFromText(const String& text) {
+    bool newEnabled;
+    if (!InputValidation::readBoolean(text, newEnabled)) {
+        return false;
+    }
+    return setTurnOnBelow(newEnabled);
+}
 
 const Schedule& Controller::getSchedule() const {
-    // TODO
+    return schedule;
 }
 
 const AutoControl& Controller::getAutomatic() const {
-    // TODO
+    return automatic;
 }
 
-// Update each kind of device
-
+// Device behavior will be implemented separately.
+/*
 void Controller::update(SolenoidState mode, float reading) {
     // TODO
 }

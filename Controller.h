@@ -33,7 +33,7 @@ public:
     Controller(const AutoControl& A);
 
     // Manual ON/OFF request. Selecting MANUAL alone does not request ON.
-    void setManual(bool on);
+    bool setManual(bool on);
     bool getManual() const;
 
     // Ask for this device's final decision, not its physical relay status.
@@ -43,7 +43,7 @@ public:
     // Return true only when accepted; false leaves the old settings unchanged.
     // Hours: 0-23, minutes: 0-59, duration: 1-1440 minutes.
     // The current Schedule class does not support runs crossing midnight.
-    bool setSchedule(const Controller& device, int hour, int minute, int durationMinutes);
+    bool setSchedule(int hour, int minute, int durationMinutes);
 
     // Sunday = 0 through Saturday = 6.
     bool setScheduleDay(int day, bool enabled);
@@ -54,7 +54,17 @@ public:
 
     // true: turn on below the lower threshold (for example, heating).
     // false: turn on above the upper threshold (for example, cooling).
-    void setTurnOnBelow(bool enabled);
+    bool setTurnOnBelow(bool enabled);
+
+    // Incoming webpage text: reject empty, malformed, or overflowing numbers.
+    // Use these BEFORE any toInt(), toFloat(), or bool conversion.
+    // Booleans accept only "true", "false", "1", or "0".
+    bool setManualFromText(const String& text);
+    bool setScheduleFromText(const String& hour, const String& minute,
+                             const String& durationMinutes);
+    bool setScheduleDayFromText(const String& day, const String& enabled);
+    bool setAutomaticThresholdsFromText(const String& lower, const String& upper);
+    bool setTurnOnBelowFromText(const String& text);
 
     // Read settings back without allowing outside code to change the members.
     const Schedule& getSchedule() const;

@@ -11,9 +11,10 @@ private:
 public:
     AutoControl();
 
-    void set_Thresholds(float lower, float upper);
+    // Reject non-finite or unordered thresholds without changing any state.
+    bool set_Thresholds(float lower, float upper);
     // true: turn on below the lower threshold. false: turn on above the upper.
-    void set_Turn_On_Below(bool enabled);
+    bool set_Turn_On_Below(bool enabled);
 
     float get_Lower_Threshold() const;
     float get_Upper_Threshold() const;
