@@ -67,6 +67,10 @@ public:
     void update(LightState mode);                 // Light.
     void update(DeviceState mode, float reading); // Heater or fan.
 
+    void Run_Irrigation(Pump pumpState);
+    void Run_Light();
+    void Run_Heater();
+    void Run_Fan();
     // The shared pump will use the valve controllers' getShouldRun() results.
     // Network requests, typing delays, and receipt indicators belong outside
     // this class. Accepting a setting does not save it across restarts.
