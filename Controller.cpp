@@ -62,17 +62,43 @@ const AutoControl& Controller::getAutomatic() const {
     return automatic;
 }
 
-// Device behavior will be implemented separately.
-/*
+// Device behavior
+
 void Controller::update(SolenoidState mode, float reading) {
-    // TODO
+    if (mode == SolenoidState::OFF) {
+        Should_Run = false;
+    }
+    else if (mode == SolenoidState::MANUAL) {
+        Should_Run = manual;
+    }
+    else if (mode == SolenoidState::SCHEDULE) {
+        Should_Run = schedule.isActive();
+    }
+    else if (mode == SolenoidState::AUTO) {
+        Should_Run = automatic.isActive(reading);
+    }
 }
 
 void Controller::update(LightState mode) {
-    // TODO
+    if (mode == LightState::OFF) {
+        Should_Run = false;
+    }
+    else if (mode == LightState::MANUAL) {
+        Should_Run = manual;
+    }
+    else if (mode == LightState::SCHEDULE) {
+        Should_Run = schedule.isActive();
+    }
 }
 
 void Controller::update(DeviceState mode, float reading) {
-    // TODO
+    if (mode == DeviceState::OFF) {
+        Should_Run = false;
+    }
+    else if (mode == DeviceState::MANUAL) {
+        Should_Run = manual;
+    }
+    else if (mode == DeviceState::AUTO) {
+        Should_Run = automatic.isActive(reading);
+    }
 }
-*/
