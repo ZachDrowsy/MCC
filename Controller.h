@@ -3,33 +3,64 @@
 #include "States.h"
 #include "Auto_Control.h"
 #include "Schedule.h"
-#include "Sensor.h"
 
 class Controller{
-private: 
-  bool Should_Run = false;
-  bool manual = false; 
-  Schedule schedule;
-  AutoControl automatic;
-/* Declared in States.h
-SolenoidState Irrigation_State = SolenoidState::OFF;
-SolenoidState Mist_State = SolenoidState::OFF;
-LightState Light_State = LightState::OFF;
-DeviceState Fan_State = DeviceState::OFF;
-DeviceState Heater_State = DeviceState::OFF;
-*/
+private:
+    bool Should_Run = false;
+    bool manual = false;
+    Schedule schedule;
+    AutoControl automatic;
 
 public:
-// use 
-  Controller();
-  //Controller(const AutoControl& A, const Schedule& S, const Should_Run& = false, const manual& = false); 
-// For Light
-  Controller(const Schedule& S,bool SH, bool m); 
-// For Device state (Heater and fan)
-  Controller(const AutoControl& A, bool SH, bool m);
-//For Pump
-  Controller(const bool SH);
+    // Constructor and method declarations only.
+    // Their implementations will go in Controller.cpp.
 
-void update
+    Controller();
 
+    // Irrigation and mist: automatic control and scheduling.
+    Controller(const AutoControl& A, const Schedule& S);
+
+    // Light: scheduling.
+    Controller(const Schedule& S);
+
+    // Heater and fan: automatic control.
+    Controller(const AutoControl& A);
+
+    // Manual ON/OFF request. Selecting MANUAL alone does not request ON.
+    void setManual(bool on);
+    bool getManual() const;
+
+    // Ask for this device's final decision, not its physical relay status.
+    bool getShouldRun() const;
+
+    // Settings entered by the user.
+    // Return true only when accepted; false leaves the old settings unchanged.
+    // Hours: 0-23, minutes: 0-59, duration: 1-1440 minutes.
+    // The current Schedule class does not support runs crossing midnight.
+    bool setSchedule(int hour, int minute, int durationMinutes);
+
+    // Sunday = 0 through Saturday = 6.
+    bool setScheduleDay(int day, bool enabled);
+
+    // Both values must be finite, and lower must be less than upper.
+    // The sensor reading and thresholds must use the same units.
+    bool setAutomaticThresholds(float lower, float upper);
+
+    // true: turn on below the lower threshold (for example, heating).
+    // false: turn on above the upper threshold (for example, cooling).
+    void setTurnOnBelow(bool enabled);
+
+    // Read settings back without allowing outside code to change the members.
+    const Schedule& getSchedule() const;
+    const AutoControl& getAutomatic() const;
+
+    // Use the selected mode already stored in States.h.
+    // These three versions match the modes supported by each device.
+    void update(SolenoidState mode, float reading); // Irrigation or mist.
+    void update(LightState mode);                 // Light.
+    void update(DeviceState mode, float reading); // Heater or fan.
+
+    // The shared pump will use the valve controllers' getShouldRun() results.
+    // Network requests, typing delays, and receipt indicators belong outside
+    // this class. Accepting a setting does not save it across restarts.
 };
