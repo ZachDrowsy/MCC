@@ -102,3 +102,45 @@ void Controller::update(DeviceState mode, float reading) {
         Should_Run = automatic.isActive(reading);
     }
 }
+
+void Controller::Run_Irrigation(Pump pumpState) {
+    if (pumpState == Pump::ON) {
+        // The pump should turn on here.
+        // digitalWrite(PUMP_PIN, HIGH);
+
+        // The irrigation solenoid should open here.
+        // digitalWrite(IRRIGATION_VALVE_PIN, HIGH);
+    }
+    else {
+        // The pump should turn off here.
+        // digitalWrite(PUMP_PIN, LOW);
+
+        // The irrigation solenoid should close here.
+        // digitalWrite(IRRIGATION_VALVE_PIN, LOW);
+    }
+}
+void Controller::Run_Light() {
+    if (Should_Run) {
+        // Turn the light on here.
+    }
+    else {
+        // Turn the light off here.
+    }
+}
+void Controller::Run_Heater() {
+    if (Should_Run) {
+        // Turn the heater on here.
+    }
+    else {
+        // Turn the heater off here.
+    }
+}
+
+void Controller::Run_Fan() {
+    if (Should_Run) {
+        // Turn the fan on here.
+    }
+    else {
+        // Turn the fan off here.
+    }
+}
