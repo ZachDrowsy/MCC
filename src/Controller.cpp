@@ -63,7 +63,7 @@ const AutoControl& Controller::getAutomatic() const {
 }
 
 // Device behavior
-
+// in main we will check if object.getShouldRun is true that way it doesnt run if we get false = false;
 void Controller::update(SolenoidState mode, float reading) {
     if (mode == SolenoidState::OFF) {
         Should_Run = false;
@@ -79,15 +79,16 @@ void Controller::update(SolenoidState mode, float reading) {
     }
 }
 
+
 void Controller::update(LightState mode) {
     if (mode == LightState::OFF) {
         Should_Run = false;
     }
     else if (mode == LightState::MANUAL) {
-        Should_Run = manual;
+        Should_Run = manual; 
     }
     else if (mode == LightState::SCHEDULE) {
-        Should_Run = schedule.isActive();
+        Should_Run = schedule.isActive(); // schedule.is active
     }
 }
 
@@ -103,8 +104,8 @@ void Controller::update(DeviceState mode, float reading) {
     }
 }
 
-void Controller::Run_Irrigation(Pump pumpState) {
-    if (pumpState == Pump::ON) {
+void Controller::Run_Irrigation(Pump p_state) {
+    if (p_state == Pump::ON) {
         // The pump should turn on here.
         // digitalWrite(PUMP_PIN, HIGH);
 
