@@ -22,25 +22,27 @@ Controller::Controller(const AutoControl& A)
 }
 
 // Remaining methods will be implemented one at a time.
-/*
+
 // Manual request and final decision
 
-void Controller::setManual(bool on) {
-    // TODO
+void Controller::setManual(bool choice) {
+    manual = choice;
 }
 
 bool Controller::getManual() const {
-    // TODO
+    return manual;
 }
 
 bool Controller::getShouldRun() const {
-    // TODO
+    return Should_Run;
 }
 
 // User settings
-
-bool Controller::setSchedule(int hour, int minute, int durationMinutes) {
-    // TODO
+// Set the starting time and duration
+bool Controller::setSchedule(const Controller& device, int hour, int minute, int durationMinutes) {
+    schedule.setStartTime(hour, minute);
+    schedule.setDurataionMinutes(durationMinutes);
+    return device.setManual(false);
 }
 
 bool Controller::setScheduleDay(int day, bool enabled) {
