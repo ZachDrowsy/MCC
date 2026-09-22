@@ -33,7 +33,7 @@ void loop(){
     Mist.update(Mist_State, humidity);
     Light.update(Light_State);
     Heater.update(Heater_State, temp);
-    Fan.update(Fan_State, tempe);
+    Fan.update(Fan_State, temp);
 
     // Temporary raw ADC thresholds until the moisture sensor is calibrated
     // and the user's webpage settings are connected.
@@ -53,10 +53,10 @@ void loop(){
 //Mist state machine   
     if (Mist.getShouldRun() == true) {
         // Open irrigation valve.
-        Mist.Run_Irrigation(Pump_State = Pump::ON);
+        Mist.Run_Mist(Pump_State = Pump::ON);
     } else {
     // Close irrigation valve.
-        Mist.Run_Irrigation(Pump_State = Pump::OFF);
+        Mist.Run_Mist(Pump_State = Pump::OFF);
     }
 // Run light state decision
 Light.Run_Light();
