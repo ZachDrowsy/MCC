@@ -1,30 +1,28 @@
-// Controller.cpp
-// Implement one outline at a time as we work through Controller.h.
-// Everything below is commented out for now, including the include.
-// Before enabling it, separate the shared definitions in States.h from
-// its declarations so main.ino and this file do not define them twice.
-
-/*
 #include "Controller.h"
 
-// Constructors
+// The booleans start false as declared in Controller.h.
+// Members not listed below use their own default constructors.
 
 Controller::Controller() {
-    // TODO
 }
 
-Controller::Controller(const AutoControl& A, const Schedule& S) {
-    // TODO
+// Irrigation and mist: copy both sets of settings into this controller.
+Controller::Controller(const AutoControl& A, const Schedule& S)
+    : schedule(S), automatic(A) {
 }
 
-Controller::Controller(const Schedule& S) {
-    // TODO
+// Light: copy the schedule settings.
+Controller::Controller(const Schedule& S)
+    : schedule(S) {
 }
 
-Controller::Controller(const AutoControl& A) {
-    // TODO
+// Heater and fan: copy the automatic settings.
+Controller::Controller(const AutoControl& A)
+    : automatic(A) {
 }
 
+// Remaining methods will be implemented one at a time.
+/*
 // Manual request and final decision
 
 void Controller::setManual(bool on) {
