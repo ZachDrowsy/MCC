@@ -1,4 +1,4 @@
-#include "Auto_Control.h"
+#include "../include/Auto_Control.h"
 #include <cmath>
 
 AutoControl::AutoControl() {

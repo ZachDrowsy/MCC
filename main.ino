@@ -1,7 +1,7 @@
-#include "connection.h"
-#include "States.h"
-#include "Schedule.h"
-#include "Sensors.h"
+#include "include/connection.h"
+#include "include/States.h"
+#include "include/Schedule.h"
+#include "include/Sensors.h"
 
 void setup(){
     Serial.begin(115200);

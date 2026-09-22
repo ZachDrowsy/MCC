@@ -1,4 +1,4 @@
-#include "Controller.h"
+#include "../include/Controller.h"
 
 // The booleans start false as declared in Controller.h.
 // Members not listed below use their own default constructors.

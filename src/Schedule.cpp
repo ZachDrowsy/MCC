@@ -1,4 +1,4 @@
-#include "Schedule.h"
+#include "../include/Schedule.h"
 
 Schedule::Schedule() {
     startHour = 0;
