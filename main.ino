@@ -3,6 +3,15 @@
 #include "include/Schedule.h"
 #include "include/Sensors.h"
 
+AutoControl Auto;
+Schedule schedule;
+
+Controller Irrigation(Auto, schedule);
+Controller Mist(Auto, schedule);
+Controller Light(schedule);
+Controller Heater(Auto);
+Controller Fan(Auto);
+
 void setup(){
     Serial.begin(115200);
     
@@ -27,10 +36,14 @@ void loop(){
     if (Irrigation_State == SolenoidState::OFF) {
         Pump_State = Pump::OFF;
         // The irrigation solenoid should be closed here.
+        //digitalWrite(pin, voltage);
+        Irrigation_State.update(Irrigation_State, Moisture_Raw);
     }
     else if (Irrigation_State == SolenoidState::MANUAL) {
         Pump_State = Pump::ON;
         // The irrigation solenoid should be open here.
+        // Simply should have digitalWrite high
+        Irrigation.update(Irrigation_State, Moisture_Raw);
     }
     else if (Irrigation_State == SolenoidState::SCHEDULE) {
         // This will become Irrigation_Schedule.isActive() later.
