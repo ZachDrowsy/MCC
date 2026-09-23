@@ -40,36 +40,38 @@ void loop(){
     const uint16_t IRRIGATION_DRY_THRESHOLD = 2500;
     const uint16_t IRRIGATION_WET_THRESHOLD = 1800;
 
-    // Irrigation state machine.
-    Irrigation.update(Irrigation_State, Moisture_Raw);
-
+    // Irrigation and mist share one pump.
     if (Irrigation.getShouldRun() == true || Mist.getShouldRun() == true) {
         Pump_State = Pump::ON;
-        // Open irrigation valve.
-        if(Irrigation.getShouldRun() == true && Mist.getShouldRun() == true){
-            Irrigation.Run_Irrigation(Pump_State = Pump::ON);
-            Mist.Run_Mist(Pump_State = Pump::ON);
+
+        if (Irrigation.getShouldRun() == true && Mist.getShouldRun() == true) {
+            Irrigation.Run_Irrigation(Pump::ON);
+            Mist.Run_Mist(Pump::ON);
         }
-        else if(Irrigation.getShouldRun() == true)
-            Irrigation.Run_Irrigation(Pump_State = Pump::ON);
-        else if(Mist.getShouldRun() == true)
-            Mist.Run_Mist(Pump_State = Pump::ON);
-        
-    } else {
-    // Close irrigation valve.
-         Irrigation.Run_Irrigation(Pump_State = Pump::OFF);
-         Mist.Run_Mist(Pump_State = Pump::OFF);
+        else if (Irrigation.getShouldRun() == true) {
+            Irrigation.Run_Irrigation(Pump::ON);
+            Mist.Run_Mist(Pump::OFF);
+        }
+        else if (Mist.getShouldRun() == true) {
+            Irrigation.Run_Irrigation(Pump::OFF);
+            Mist.Run_Mist(Pump::ON);
+        }
     }
-//Mist state machine   
-   /*
-    if (Mist.getShouldRun() == true) {
-        // Open irrigation valve.
-        Mist.Run_Mist(Pump_State = Pump::ON);
-    } else {
-    // Close irrigation valve.
-        Mist.Run_Mist(Pump_State = Pump::OFF);
+    else {
+        Pump_State = Pump::OFF;
+
+        Irrigation.Run_Irrigation(Pump::OFF);
+        Mist.Run_Mist(Pump::OFF);
     }
-    */
+
+    // Control the shared pump once. Confirm relay HIGH/LOW levels before use.
+    if (Pump_State == Pump::ON) {
+        // digitalWrite(PUMP_PIN, HIGH);
+    }
+    else {
+        // digitalWrite(PUMP_PIN, LOW);
+    }
+
 // Run light state decision
 Light.Run_Light();
 // Heater and Fan state decision
