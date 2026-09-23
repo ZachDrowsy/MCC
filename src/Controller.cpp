@@ -1,5 +1,25 @@
 #include "../include/Controller.h"
 
+const uint8_t IRRIGATION_VALVE_PIN = 33;
+const uint8_t MIST_VALVE_PIN = 25;
+const uint8_t FAN_PIN = 26;
+const uint8_t LIGHT_PIN = 27; // The heat lamp uses the Light controller.
+
+void Setup_Relays() {
+    // Set the OFF level before enabling each output.
+    digitalWrite(IRRIGATION_VALVE_PIN, RELAY_OFF);
+    pinMode(IRRIGATION_VALVE_PIN, OUTPUT);
+
+    digitalWrite(MIST_VALVE_PIN, RELAY_OFF);
+    pinMode(MIST_VALVE_PIN, OUTPUT);
+
+    digitalWrite(FAN_PIN, RELAY_OFF);
+    pinMode(FAN_PIN, OUTPUT);
+
+    digitalWrite(LIGHT_PIN, RELAY_OFF);
+    pinMode(LIGHT_PIN, OUTPUT);
+}
+
 // The booleans start false as declared in Controller.h.
 // Members not listed below use their own default constructors.
 
@@ -108,47 +128,42 @@ void Controller::update(DeviceState mode, float reading) {
 void Controller::Run_Irrigation(Pump p_state) {
     if (p_state == Pump::ON) {
         // Open the irrigation valve.
-        // digitalWrite(IRRIGATION_VALVE_PIN, HIGH);
+        digitalWrite(IRRIGATION_VALVE_PIN, RELAY_ON);
     }
     else {
         // Close the irrigation valve.
-        // digitalWrite(IRRIGATION_VALVE_PIN, LOW);
+        digitalWrite(IRRIGATION_VALVE_PIN, RELAY_OFF);
     }
 }
 
 void Controller::Run_Mist(Pump p_state) {
     if (p_state == Pump::ON) {
         // Open the mist valve.
-        // digitalWrite(MIST_VALVE_PIN, HIGH);
+        digitalWrite(MIST_VALVE_PIN, RELAY_ON);
     }
     else {
         // Close the mist valve.
-        // digitalWrite(MIST_VALVE_PIN, LOW);
+        digitalWrite(MIST_VALVE_PIN, RELAY_OFF);
     }
 }
 
 void Controller::Run_Light() {
     if (Should_Run) {
-        // Turn the light on here.
+        digitalWrite(LIGHT_PIN, RELAY_ON);
     }
     else {
-        // Turn the light off here.
+        digitalWrite(LIGHT_PIN, RELAY_OFF);
     }
 }
 void Controller::Run_Heater() {
-    if (Should_Run) {
-        // Turn the heater on here.
-    }
-    else {
-        // Turn the heater off here.
-    }
+    // No separate heater is connected. The heat lamp uses Run_Light().
 }
 
 void Controller::Run_Fan() {
     if (Should_Run) {
-        // Turn the fan on here.
+        digitalWrite(FAN_PIN, RELAY_ON);
     }
     else {
-        // Turn the fan off here.
+        digitalWrite(FAN_PIN, RELAY_OFF);
     }
 }

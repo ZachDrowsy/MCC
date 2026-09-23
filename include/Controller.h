@@ -5,6 +5,13 @@
 #include "Schedule.h"
 #include "States.h"
 
+// HIGH-trigger relay modules. Reverse these if the hardware test says otherwise.
+const uint8_t RELAY_ON = HIGH;
+const uint8_t RELAY_OFF = LOW;
+
+// Call once in setup before starting sensors or Wi-Fi.
+void Setup_Relays();
+
 class Controller{
 private:
     bool Should_Run = false;

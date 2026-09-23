@@ -6,6 +6,8 @@
 #include "include/Auto_Control.h"
 
 
+const uint8_t PUMP_PIN = 32;
+
 AutoControl Auto;
 Schedule schedule;
 
@@ -16,6 +18,11 @@ Controller Heater(Auto);
 Controller Fan(Auto);
 
 void setup(){
+    // Keep the pump and valves off before sensors and Wi-Fi start.
+    digitalWrite(PUMP_PIN, RELAY_OFF);
+    pinMode(PUMP_PIN, OUTPUT);
+    Setup_Relays();
+
     Serial.begin(115200);
     
     // sets up declarations for all THREE sensors 
@@ -64,12 +71,12 @@ void loop(){
         Mist.Run_Mist(Pump::OFF);
     }
 
-    // Control the shared pump once. Confirm relay HIGH/LOW levels before use.
+    // Control the shared pump once.
     if (Pump_State == Pump::ON) {
-        // digitalWrite(PUMP_PIN, HIGH);
+        digitalWrite(PUMP_PIN, RELAY_ON);
     }
     else {
-        // digitalWrite(PUMP_PIN, LOW);
+        digitalWrite(PUMP_PIN, RELAY_OFF);
     }
 
 // Run light state decision
