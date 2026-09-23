@@ -46,7 +46,11 @@ void loop(){
     if (Irrigation.getShouldRun() == true || Mist.getShouldRun() == true) {
         Pump_State = Pump::ON;
         // Open irrigation valve.
-        if(Irrigation.getShouldRun() == true)
+        if(Irrigation.getShouldRun() == true && Mist.getShouldRun() == true){
+            Irrigation.Run_Irrigation(Pump_State = Pump::ON);
+            Mist.Run_Mist(Pump_State = Pump::ON);
+        }
+        else if(Irrigation.getShouldRun() == true)
             Irrigation.Run_Irrigation(Pump_State = Pump::ON);
         else if(Mist.getShouldRun() == true)
             Mist.Run_Mist(Pump_State = Pump::ON);
