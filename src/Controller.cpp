@@ -121,6 +121,22 @@ void Controller::Run_Irrigation(Pump p_state) {
         // digitalWrite(IRRIGATION_VALVE_PIN, LOW);
     }
 }
+void Controller::Run_Mist(Pump p_state) {
+    if (p_state == Pump::ON) {
+        // The pump should turn on here.
+        // digitalWrite(PUMP_PIN, HIGH);
+
+        // The irrigation solenoid should open here.
+        // digitalWrite(MIST VALVE PIN, HIGH);
+    }
+    else {
+        // The pump should turn off here.
+        // digitalWrite(PUMP_PIN, LOW);
+
+        // The irrigation solenoid should close here.
+        // digitalWrite(MIST VALVE_PIN, LOW);
+    }
+}
 void Controller::Run_Light() {
     if (Should_Run) {
         // Turn the light on here.
