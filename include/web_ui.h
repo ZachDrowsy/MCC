@@ -539,6 +539,9 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
         button.classList.add("active");
         document.getElementById(button.dataset.target).classList.add("active");
         modes[system] = button.dataset.target.replace(system + "-", "");
+        fetch("/api/state?system=" + system + "&mode=" + modes[system], {
+          method: "POST"
+        });
         if ((system === "fan" || system === "heater") && modes[system] !== "manual") {
           manualOutputs[system] = false;
           renderManual(system);
