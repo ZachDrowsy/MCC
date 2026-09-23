@@ -63,6 +63,7 @@ public:
     void update(DeviceState mode, float reading); // Heater or fan.
 
     void Run_Irrigation(Pump pumpState);
+    void Run_Mist(Pump pumpState);
     void Run_Light();
     void Run_Heater();
     void Run_Fan();
