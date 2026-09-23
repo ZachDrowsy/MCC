@@ -57,7 +57,8 @@ void loop(){
         
     } else {
     // Close irrigation valve.
-        Irrigation.Run_Irrigation(Pump_State = Pump::OFF);
+         Irrigation.Run_Irrigation(Pump_State = Pump::OFF);
+         Mist.Run_Mist(Pump_State = Pump::OFF);
     }
 //Mist state machine   
    /*
