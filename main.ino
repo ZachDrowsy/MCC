@@ -43,14 +43,20 @@ void loop(){
     // Irrigation state machine.
     Irrigation.update(Irrigation_State, Moisture_Raw);
 
-    if (Irrigation.getShouldRun() == true) {
-    // Open irrigation valve.
-        Irrigation.Run_Irrigation(Pump_State = Pump::ON);
+    if (Irrigation.getShouldRun() == true || Mist.getShouldRun() == true) {
+        Pump_State = Pump::ON;
+        // Open irrigation valve.
+        if(Irrigation.getShouldRun() == true)
+            Irrigation.Run_Irrigation(Pump_State = Pump::ON);
+        else if(Mist.getShouldRun() == true)
+            Mist.Run_Mist(Pump_State = Pump::ON);
+        
     } else {
     // Close irrigation valve.
         Irrigation.Run_Irrigation(Pump_State = Pump::OFF);
     }
 //Mist state machine   
+   /*
     if (Mist.getShouldRun() == true) {
         // Open irrigation valve.
         Mist.Run_Mist(Pump_State = Pump::ON);
@@ -58,6 +64,7 @@ void loop(){
     // Close irrigation valve.
         Mist.Run_Mist(Pump_State = Pump::OFF);
     }
+    */
 // Run light state decision
 Light.Run_Light();
 // Heater and Fan state decision
