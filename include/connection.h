@@ -12,7 +12,7 @@ static DNSServer dnsServer;
 static Preferences preferences;
 
 static const char* SETUP_WIFI_NAME = "MCC-Setup";
-static const char* HOST_NAME = "microclimatecontroller";
+static const char* HOST_NAME = "mcc";
 
 // Most ESP32 Dev boards use GPIO 0 for the BOOT button.
 static const int WIFI_RESET_PIN = 0;
