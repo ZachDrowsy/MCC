@@ -370,54 +370,6 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
     </div>
   </section>
 
-  <!-- LIGHT -->
-  <section class="card system-card" data-system="light">
-    <h2>Light</h2>
-    <div class="card-desc">Independent relay control for the grow light.</div>
-
-    <p class="control-status">Activation: <strong id="lightStatus">Connecting</strong></p>
-    <button class="action" id="lightButton" disabled>Turn Light On</button>
-    <p class="rule-note" id="lightFeedback" role="status">Reading controller state...</p>
-
-
-    <div class="mode-tabs light-tabs">
-      <button class="mode-tab active" data-target="light-manual">Manual</button>
-      <button class="mode-tab" data-target="light-schedule">Schedule</button>
-    </div>
-
-    <div class="panel active" id="light-manual">
-      <div class="rule-note">When enabled, light runs continuously until turned off.</div>
-    </div>
-
-    <div class="panel" id="light-schedule">
-      <div class="row">
-        <label class="field">
-          <span class="field-label">Turn On</span>
-          <input type="time" id="lightStart" value="08:00">
-        </label>
-        <label class="field">
-          <span class="field-label">Turn Off</span>
-          <input type="time" id="lightEnd" value="18:00">
-        </label>
-      </div>
-
-      <div style="margin-top:16px;">
-        <div class="field-label">Days of Week</div>
-        <div class="days" id="lightDays">
-          <button class="day active" data-day="Sun">S</button>
-          <button class="day active" data-day="Mon">M</button>
-          <button class="day active" data-day="Tue">T</button>
-          <button class="day active" data-day="Wed">W</button>
-          <button class="day active" data-day="Thu">T</button>
-          <button class="day active" data-day="Fri">F</button>
-          <button class="day active" data-day="Sat">S</button>
-        </div>
-      </div>
-
-      <div class="summary" id="lightSummary"></div>
-    </div>
-  </section>
-
   <!-- FAN -->
   <section class="card system-card" data-system="fan">
     <h2>Fan</h2>
@@ -496,7 +448,6 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
   const modes = {
     irrigation: "manual",
     mist: "manual",
-    light: "manual",
     fan: "manual",
     heater: "manual"
   };
@@ -625,7 +576,7 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
     });
   });
 
-  ["irrigationStart", "irrigationDuration", "mistStart", "mistDuration", "lightStart", "lightEnd"].forEach(function(id) {
+  ["irrigationStart", "irrigationDuration", "mistStart", "mistDuration"].forEach(function(id) {
     document.getElementById(id).addEventListener("input", updateAllSummaries);
   });
 
@@ -661,10 +612,6 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
       " for " + mistDuration + " minute" + (mistDuration == 1 ? "" : "s") +
       " on " + selectedDays("mistDays") + ".";
 
-    document.getElementById("lightSummary").textContent =
-      "Light will turn on at " + formatTime(document.getElementById("lightStart").value) +
-      " and off at " + formatTime(document.getElementById("lightEnd").value) +
-      " on " + selectedDays("lightDays") + ".";
   }
 
   function validateAutomaticSettings() {
@@ -726,15 +673,7 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
           turnOffAboveF: Number(document.getElementById("heaterOffThreshold").value)
         }
       },
-      light: {
-        mode: modes.light,
-        schedule: {
-          start: document.getElementById("lightStart").value,
-          end: document.getElementById("lightEnd").value,
-          days: Array.from(document.querySelectorAll("#lightDays .day.active")).map(b => b.dataset.day)
-        }
-      }
-    };
+};
   }
 
   document.getElementById("saveButton").addEventListener("click", function() {
