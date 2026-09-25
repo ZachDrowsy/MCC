@@ -150,7 +150,13 @@ void Controller::Run_Light() {
     }
 }
 void Controller::Run_Heater() {
-    // No separate heater is connected. The heat lamp uses Run_Light().
+    // Pin 27 controls the heat lamp relay.
+    if (Should_Run) {
+        digitalWrite(LIGHT_PIN, RELAY_ON);
+    }
+    else {
+        digitalWrite(LIGHT_PIN, RELAY_OFF);
+    }
 }
 
 void Controller::Run_Fan() {
