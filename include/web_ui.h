@@ -96,7 +96,7 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
       margin-bottom: 14px;
     }
 
-    .light-tabs { grid-template-columns: repeat(2, 1fr); }
+    .two-column-tabs { grid-template-columns: repeat(2, 1fr); }
 
     button {
       cursor: pointer;
@@ -200,7 +200,7 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
       .sensor:first-child { grid-column: 1 / -1; }
       .row { flex-direction: column; }
       .mode-tabs { grid-template-columns: 1fr 1fr; }
-      .light-tabs { grid-template-columns: repeat(2, 1fr); }
+      .two-column-tabs { grid-template-columns: repeat(2, 1fr); }
       .day { min-width: 0; padding: 0; }
     }
   </style>
@@ -212,7 +212,7 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
   <div class="topbar">
     <div>
       <h1>Micro-Climate Controller</h1>
-      <div class="subtitle">Irrigation, mist, lighting, fan and heater controller</div>
+      <div class="subtitle">Irrigation, mist, fan and heater controller</div>
     </div>
     <div class="status" id="connectionStatus" role="status">CONNECTING</div>
   </div>
@@ -379,7 +379,7 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
     <button class="action" id="fanButton" disabled>Turn Fan On</button>
     <p class="rule-note" id="fanFeedback" role="status">Reading controller state...</p>
 
-    <div class="mode-tabs light-tabs">
+    <div class="mode-tabs two-column-tabs">
       <button class="mode-tab" data-target="fan-auto">Automatic</button>
       <button class="mode-tab active" data-target="fan-manual">Manual</button>
     </div>
@@ -413,7 +413,7 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
     <button class="action" id="heaterButton" disabled>Turn Heater On</button>
     <p class="rule-note" id="heaterFeedback" role="status">Reading controller state...</p>
 
-    <div class="mode-tabs light-tabs">
+    <div class="mode-tabs two-column-tabs">
       <button class="mode-tab" data-target="heater-auto">Automatic</button>
       <button class="mode-tab active" data-target="heater-manual">Manual</button>
     </div>
@@ -454,7 +454,6 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
   const activations = {
     irrigation: "off",
     mist: "off",
-    light: "off",
     fan: "off",
     heater: "off"
   };
@@ -672,8 +671,8 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
           turnOnBelowF: Number(document.getElementById("heaterOnThreshold").value),
           turnOffAboveF: Number(document.getElementById("heaterOffThreshold").value)
         }
-      },
-};
+      }
+    };
   }
 
   document.getElementById("saveButton").addEventListener("click", function() {
