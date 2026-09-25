@@ -9,23 +9,32 @@ enum class Pump : uint8_t {
 };
 
 enum class SolenoidState : uint8_t {
-    OFF,
     MANUAL,
     SCHEDULE,
     AUTO
 };
 
 enum class LightState : uint8_t {
-    OFF,
     MANUAL,
     SCHEDULE
 };
 
 enum class DeviceState : uint8_t {
-    OFF,
     AUTO,
     MANUAL
 };
+
+// Activation is separate from the selected operating mode.
+enum class Activate : uint8_t {
+    ON,
+    OFF
+};
+
+extern Activate Irrigation_Activation;
+extern Activate Mist_Activation;
+extern Activate Light_Activation;
+extern Activate Fan_Activation;
+extern Activate Heater_Activation;
 
 // These variables are defined once in States.cpp.
 extern Pump Pump_State;

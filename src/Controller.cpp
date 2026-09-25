@@ -41,16 +41,7 @@ Controller::Controller(const AutoControl& A)
     : automatic(A) {
 }
 
-// Manual request and final decision
-
-bool Controller::setManual(bool choice) {
-    manual = choice;
-    return true;
-}
-
-bool Controller::getManual() const {
-    return manual;
-}
+// Final output decision
 
 bool Controller::getShouldRun() const {
     return Should_Run;
@@ -84,9 +75,10 @@ const AutoControl& Controller::getAutomatic() const {
 
 // Device behavior
 // in main we will check if object.getShouldRun is true that way it doesnt run if we get false = false;
-void Controller::update(SolenoidState mode, float reading) {
-    if (mode == SolenoidState::OFF) {
+void Controller::update(Activate activation, SolenoidState mode, float reading) {
+    if (activation == Activate::OFF) {
         Should_Run = false;
+        automatic.reset();
     }
     else if (mode == SolenoidState::MANUAL) {
         Should_Run = true;
@@ -100,9 +92,10 @@ void Controller::update(SolenoidState mode, float reading) {
 }
 
 
-void Controller::update(LightState mode) {
-    if (mode == LightState::OFF) {
+void Controller::update(Activate activation, LightState mode) {
+    if (activation == Activate::OFF) {
         Should_Run = false;
+        automatic.reset();
     }
     else if (mode == LightState::MANUAL) {
         Should_Run = true; 
@@ -112,9 +105,10 @@ void Controller::update(LightState mode) {
     }
 }
 
-void Controller::update(DeviceState mode, float reading) {
-    if (mode == DeviceState::OFF) {
+void Controller::update(Activate activation, DeviceState mode, float reading) {
+    if (activation == Activate::OFF) {
         Should_Run = false;
+        automatic.reset();
     }
     else if (mode == DeviceState::MANUAL) {
         

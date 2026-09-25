@@ -1,7 +1,7 @@
 #pragma once
 #include <Arduino.h>
 
-// Live sensor readings are connected; control requests remain integration placeholders.
+// Sensor readings, mode buttons, and activation buttons are connected.
 // Firmware must apply modes and validate settings independently of the browser.
 // Mist AUTO: ON below humidityThresholdPercent; OFF at/above
 // humidityOffThresholdPercent; retain the previous output between thresholds.
@@ -91,12 +91,12 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
 
     .mode-tabs {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 7px;
       margin-bottom: 14px;
     }
 
-    .light-tabs { grid-template-columns: repeat(3, 1fr); }
+    .light-tabs { grid-template-columns: repeat(2, 1fr); }
 
     button {
       cursor: pointer;
@@ -200,7 +200,7 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
       .sensor:first-child { grid-column: 1 / -1; }
       .row { flex-direction: column; }
       .mode-tabs { grid-template-columns: 1fr 1fr; }
-      .light-tabs { grid-template-columns: repeat(3, 1fr); }
+      .light-tabs { grid-template-columns: repeat(2, 1fr); }
       .day { min-width: 0; padding: 0; }
     }
   </style>
@@ -237,23 +237,19 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
     <h2>Irrigation</h2>
     <div class="card-desc">Controls the irrigation solenoid independently from mist.</div>
 
+    <p class="control-status">Activation: <strong id="irrigationStatus">Connecting</strong></p>
+    <button class="action" id="irrigationButton" disabled>Turn Irrigation On</button>
+    <p class="rule-note" id="irrigationFeedback" role="status">Reading controller state...</p>
+
+
     <div class="mode-tabs">
-      <button class="mode-tab active" data-target="irrigation-off">Off</button>
-      <button class="mode-tab" data-target="irrigation-manual">Manual</button>
+      <button class="mode-tab active" data-target="irrigation-manual">Manual</button>
       <button class="mode-tab" data-target="irrigation-schedule">Schedule</button>
       <button class="mode-tab" data-target="irrigation-auto">Automatic</button>
     </div>
 
-    <div class="panel active" id="irrigation-off">
-      <div class="rule-box">
-        <div class="rule-title">Irrigation disabled</div>
-        <div class="rule-note">No scheduled or moisture-triggered irrigation will run.</div>
-      </div>
-    </div>
-
-    <div class="panel" id="irrigation-manual">
-      <p class="control-status">Valve status: <strong id="irrigationStatus">Closed</strong></p>
-      <button class="action" id="irrigationButton">Open Irrigation</button>
+    <div class="panel active" id="irrigation-manual">
+      <div class="rule-note">When enabled, irrigation runs continuously until turned off.</div>
     </div>
 
     <div class="panel" id="irrigation-schedule">
@@ -307,23 +303,19 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
     <h2>Mist</h2>
     <div class="card-desc">Controls the mister solenoid independently from irrigation.</div>
 
+    <p class="control-status">Activation: <strong id="mistStatus">Connecting</strong></p>
+    <button class="action" id="mistButton" disabled>Turn Mist On</button>
+    <p class="rule-note" id="mistFeedback" role="status">Reading controller state...</p>
+
+
     <div class="mode-tabs">
-      <button class="mode-tab active" data-target="mist-off">Off</button>
-      <button class="mode-tab" data-target="mist-manual">Manual</button>
+      <button class="mode-tab active" data-target="mist-manual">Manual</button>
       <button class="mode-tab" data-target="mist-schedule">Schedule</button>
       <button class="mode-tab" data-target="mist-auto">Automatic</button>
     </div>
 
-    <div class="panel active" id="mist-off">
-      <div class="rule-box">
-        <div class="rule-title">Mist disabled</div>
-        <div class="rule-note">No scheduled or humidity-triggered misting will run.</div>
-      </div>
-    </div>
-
-    <div class="panel" id="mist-manual">
-      <p class="control-status">Valve status: <strong id="mistStatus">Closed</strong></p>
-      <button class="action" id="mistButton">Open Mist</button>
+    <div class="panel active" id="mist-manual">
+      <div class="rule-note">When enabled, mist runs continuously until turned off.</div>
     </div>
 
     <div class="panel" id="mist-schedule">
@@ -383,22 +375,18 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
     <h2>Light</h2>
     <div class="card-desc">Independent relay control for the grow light.</div>
 
+    <p class="control-status">Activation: <strong id="lightStatus">Connecting</strong></p>
+    <button class="action" id="lightButton" disabled>Turn Light On</button>
+    <p class="rule-note" id="lightFeedback" role="status">Reading controller state...</p>
+
+
     <div class="mode-tabs light-tabs">
-      <button class="mode-tab active" data-target="light-off">Off</button>
-      <button class="mode-tab" data-target="light-manual">Manual</button>
+      <button class="mode-tab active" data-target="light-manual">Manual</button>
       <button class="mode-tab" data-target="light-schedule">Schedule</button>
     </div>
 
-    <div class="panel active" id="light-off">
-      <div class="rule-box">
-        <div class="rule-title">Light disabled</div>
-        <div class="rule-note">The light relay will remain off.</div>
-      </div>
-    </div>
-
-    <div class="panel" id="light-manual">
-      <p class="control-status">Light status: <strong id="lightStatus">Off</strong></p>
-      <button class="action" id="lightButton">Turn Light On</button>
+    <div class="panel active" id="light-manual">
+      <div class="rule-note">When enabled, light runs continuously until turned off.</div>
     </div>
 
     <div class="panel" id="light-schedule">
@@ -434,16 +422,14 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
   <section class="card system-card" data-system="fan">
     <h2>Fan</h2>
     <div class="card-desc">Independent manual and automatic temperature control.</div>
+
+    <p class="control-status">Activation: <strong id="fanStatus">Connecting</strong></p>
+    <button class="action" id="fanButton" disabled>Turn Fan On</button>
+    <p class="rule-note" id="fanFeedback" role="status">Reading controller state...</p>
+
     <div class="mode-tabs light-tabs">
-      <button class="mode-tab active" data-target="fan-off">Off</button>
       <button class="mode-tab" data-target="fan-auto">Automatic</button>
-      <button class="mode-tab" data-target="fan-manual">Manual</button>
-    </div>
-    <div class="panel active" id="fan-off">
-      <div class="rule-box">
-        <div class="rule-title">Fan disabled</div>
-        <div class="rule-note">The fan relay will remain off.</div>
-      </div>
+      <button class="mode-tab active" data-target="fan-manual">Manual</button>
     </div>
     <div class="panel" id="fan-auto">
       <div class="rule-box">
@@ -461,9 +447,8 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
         </label>
       </div>
     </div>
-    <div class="panel" id="fan-manual">
-      <p class="control-status">Fan status: <strong id="fanStatus">Off</strong></p>
-      <button class="action" id="fanButton">Turn Fan On</button>
+    <div class="panel active" id="fan-manual">
+      <div class="rule-note">When enabled, fan runs continuously until turned off.</div>
     </div>
   </section>
 
@@ -471,16 +456,14 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
   <section class="card system-card" data-system="heater">
     <h2>Heater</h2>
     <div class="card-desc">Independent manual and automatic temperature control.</div>
+
+    <p class="control-status">Activation: <strong id="heaterStatus">Connecting</strong></p>
+    <button class="action" id="heaterButton" disabled>Turn Heater On</button>
+    <p class="rule-note" id="heaterFeedback" role="status">Reading controller state...</p>
+
     <div class="mode-tabs light-tabs">
-      <button class="mode-tab active" data-target="heater-off">Off</button>
       <button class="mode-tab" data-target="heater-auto">Automatic</button>
-      <button class="mode-tab" data-target="heater-manual">Manual</button>
-    </div>
-    <div class="panel active" id="heater-off">
-      <div class="rule-box">
-        <div class="rule-title">Heater disabled</div>
-        <div class="rule-note">The heater relay will remain off.</div>
-      </div>
+      <button class="mode-tab active" data-target="heater-manual">Manual</button>
     </div>
     <div class="panel" id="heater-auto">
       <div class="rule-box">
@@ -498,24 +481,26 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
         </label>
       </div>
     </div>
-    <div class="panel" id="heater-manual">
-      <p class="control-status">Heater status: <strong id="heaterStatus">Off</strong></p>
-      <button class="action" id="heaterButton">Turn Heater On</button>
+    <div class="panel active" id="heater-manual">
+      <div class="rule-note">When enabled, heater runs continuously until turned off.</div>
     </div>
   </section>
 
-  <p class="rule-note" id="settingsFeedback" role="status">Controls preview settings only; device integration is pending.</p>
+  <p class="rule-note" id="settingsFeedback" role="status">Mode and On/Off buttons are connected. Schedule and threshold settings are not sent yet.</p>
   <button class="save" id="saveButton">Save Settings</button>
 
 </div>
 
 <script>
-  let irrigationOpen = false;
-  let mistOpen = false;
-  let lightOn = false;
-
-  // Stores the selected operating mode for each independent system.
+  // Mode and activation are separate states, just like in States.h.
   const modes = {
+    irrigation: "manual",
+    mist: "manual",
+    light: "manual",
+    fan: "manual",
+    heater: "manual"
+  };
+  const activations = {
     irrigation: "off",
     mist: "off",
     light: "off",
@@ -525,29 +510,112 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
 
   document.querySelectorAll(".system-card").forEach(function(card) {
     const system = card.dataset.system;
+    const name = card.querySelector("h2").textContent;
+    const activationButton = document.getElementById(system + "Button");
+    const feedback = document.getElementById(system + "Feedback");
+    const modeButtons = card.querySelectorAll(".mode-tab");
+    let busy = false;
 
-    card.querySelectorAll(".mode-tab").forEach(function(button) {
+    function setButtonsDisabled(disabled) {
+      activationButton.disabled = disabled;
+      modeButtons.forEach(function(button) {
+        button.disabled = disabled;
+      });
+    }
+
+    function renderState() {
+      modeButtons.forEach(function(button) {
+        button.classList.toggle("active", button.dataset.target === system + "-" + modes[system]);
+      });
+      card.querySelectorAll(".panel").forEach(function(panel) {
+        panel.classList.toggle("active", panel.id === system + "-" + modes[system]);
+      });
+      const on = activations[system] === "on";
+      document.getElementById(system + "Status").textContent = on ? "On (enabled)" : "Off (disabled)";
+      activationButton.textContent = "Turn " + name + (on ? " Off" : " On");
+      activationButton.classList.toggle("on", on);
+      activationButton.setAttribute("aria-pressed", String(on));
+    }
+
+    async function request(url, method) {
+      const timeoutController = new AbortController();
+      const timeout = setTimeout(function() { timeoutController.abort(); }, 5000);
+      try {
+        const response = await fetch(url, {
+          method: method,
+          cache: "no-store",
+          signal: timeoutController.signal
+        });
+        if (!response.ok) throw new Error("Request rejected");
+        return await response.text();
+      }
+      finally {
+        clearTimeout(timeout);
+      }
+    }
+
+    // Read back the ESP32 state, including after a page refresh.
+    async function syncState() {
+      const text = await request("/api/state?system=" + system, "GET");
+      const state = JSON.parse(text);
+      modes[system] = state.mode;
+      activations[system] = state.activation;
+      renderState();
+      feedback.textContent = "On enables the selected mode; it does not always mean the output is running.";
+    }
+
+    async function changeState(url) {
+      if (busy) return;
+      busy = true;
+      setButtonsDisabled(true);
+      feedback.textContent = "Sending...";
+      try {
+        await request(url, "POST");
+        await syncState();
+        setButtonsDisabled(false);
+      }
+      catch (error) {
+        document.getElementById(system + "Status").textContent = "Unknown";
+        feedback.textContent = "Could not confirm the change. Retrying connection...";
+      }
+      finally {
+        busy = false;
+      }
+    }
+
+    modeButtons.forEach(function(button) {
       button.addEventListener("click", function() {
-        card.querySelectorAll(".mode-tab").forEach(function(other) {
-          other.classList.remove("active");
-        });
-
-        card.querySelectorAll(".panel").forEach(function(panel) {
-          panel.classList.remove("active");
-        });
-
-        button.classList.add("active");
-        document.getElementById(button.dataset.target).classList.add("active");
-        modes[system] = button.dataset.target.replace(system + "-", "");
-        fetch("/api/state?system=" + system + "&mode=" + modes[system], {
-          method: "POST"
-        });
-        if ((system === "fan" || system === "heater") && modes[system] !== "manual") {
-          manualOutputs[system] = false;
-          renderManual(system);
-        }
+        const mode = button.dataset.target.replace(system + "-", "");
+        changeState("/api/state?system=" + system + "&mode=" + mode);
       });
     });
+
+    activationButton.addEventListener("click", function() {
+      const activation = activations[system] === "on" ? "off" : "on";
+      changeState("/api/activation?system=" + system + "&activation=" + activation);
+    });
+
+    async function refreshState() {
+      if (!busy) {
+        busy = true;
+        setButtonsDisabled(true);
+        try {
+          await syncState();
+          setButtonsDisabled(false);
+        }
+        catch (error) {
+          document.getElementById(system + "Status").textContent = "Unknown";
+          feedback.textContent = "Cannot reach controller. Retrying...";
+        }
+        finally {
+          busy = false;
+        }
+      }
+      setTimeout(refreshState, 3000);
+    }
+
+    setButtonsDisabled(true);
+    refreshState();
   });
 
   document.querySelectorAll(".day").forEach(function(button) {
@@ -598,54 +666,6 @@ const char WEB_UI[] PROGMEM = R"rawliteral(
       " and off at " + formatTime(document.getElementById("lightEnd").value) +
       " on " + selectedDays("lightDays") + ".";
   }
-
-  document.getElementById("irrigationButton").addEventListener("click", function() {
-    irrigationOpen = !irrigationOpen;
-    document.getElementById("irrigationStatus").textContent = irrigationOpen ? "Open" : "Closed";
-    this.textContent = irrigationOpen ? "Close Irrigation" : "Open Irrigation";
-    this.classList.toggle("on", irrigationOpen);
-
-    // Later ESP32 endpoint:
-    // fetch(irrigationOpen ? "/api/irrigation/on" : "/api/irrigation/off", { method: "POST" });
-  });
-
-  document.getElementById("mistButton").addEventListener("click", function() {
-    mistOpen = !mistOpen;
-    document.getElementById("mistStatus").textContent = mistOpen ? "Open" : "Closed";
-    this.textContent = mistOpen ? "Close Mist" : "Open Mist";
-    this.classList.toggle("on", mistOpen);
-
-    // Later ESP32 endpoint:
-    // fetch(mistOpen ? "/api/mist/on" : "/api/mist/off", { method: "POST" });
-  });
-
-  document.getElementById("lightButton").addEventListener("click", function() {
-    lightOn = !lightOn;
-    document.getElementById("lightStatus").textContent = lightOn ? "On" : "Off";
-    this.textContent = lightOn ? "Turn Light Off" : "Turn Light On";
-    this.classList.toggle("on", lightOn);
-
-    // Later ESP32 endpoint:
-    // fetch(lightOn ? "/api/light/on" : "/api/light/off", { method: "POST" });
-  });
-
-  const manualOutputs = { fan: false, heater: false };
-  function renderManual(system) {
-    const name = system === "fan" ? "Fan" : "Heater";
-    const on = manualOutputs[system];
-    document.getElementById(system + "Status").textContent = on ? "On" : "Off";
-    const button = document.getElementById(system + "Button");
-    button.textContent = "Turn " + name + (on ? " Off" : " On");
-    button.classList.toggle("on", on);
-  }
-  ["fan", "heater"].forEach(function(system) {
-    document.getElementById(system + "Button").addEventListener("click", function() {
-      if (modes[system] !== "manual") return;
-      manualOutputs[system] = !manualOutputs[system];
-      renderManual(system);
-      // Future POST: /api/<system>/on or /api/<system>/off.
-    });
-  });
 
   function validateAutomaticSettings() {
     const pairs = [

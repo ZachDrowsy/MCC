@@ -36,11 +36,11 @@ void loop(){
     
     //This will read and display sensor data in the Serial Monitor and hopefully the web_ui
     Read_Sensors();
-    Irrigation.update(Irrigation_State, Moisture_Raw);
-    Mist.update(Mist_State, humidity);
-    Light.update(Light_State);
-    Heater.update(Heater_State, temp);
-    Fan.update(Fan_State, temp);
+    Irrigation.update(Irrigation_Activation, Irrigation_State, Moisture_Raw);
+    Mist.update(Mist_Activation, Mist_State, humidity);
+    Light.update(Light_Activation, Light_State);
+    Heater.update(Heater_Activation, Heater_State, temp);
+    Fan.update(Fan_Activation, Fan_State, temp);
 
     // Temporary raw ADC thresholds until the moisture sensor is calibrated
     // and the user's webpage settings are connected.

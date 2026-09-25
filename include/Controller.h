@@ -15,7 +15,6 @@ void Setup_Relays();
 class Controller{
 private:
     bool Should_Run = false;
-    bool manual = false;
     Schedule schedule;
     AutoControl automatic;
 
@@ -33,10 +32,6 @@ public:
 
     // Heater and fan: automatic control.
     Controller(const AutoControl& A);
-
-    // Manual ON/OFF request. Selecting MANUAL alone does not request ON.
-    bool setManual(bool on);
-    bool getManual() const;
 
     // Ask for this device's final decision, not its physical relay status.
     bool getShouldRun() const;
@@ -65,9 +60,9 @@ public:
 
     // Use the selected mode already stored in States.h.
     // These three versions match the modes supported by each device.
-    void update(SolenoidState mode, float reading); // Irrigation or mist.
-    void update(LightState mode);                 // Light.
-    void update(DeviceState mode, float reading); // Heater or fan.
+    void update(Activate activation, SolenoidState mode, float reading); // Irrigation or mist.
+    void update(Activate activation, LightState mode);                 // Light.
+    void update(Activate activation, DeviceState mode, float reading); // Heater or fan.
 
     void Run_Irrigation(Pump pumpState);
     void Run_Mist(Pump pumpState);
